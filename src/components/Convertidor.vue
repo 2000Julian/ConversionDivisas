@@ -123,7 +123,7 @@
 
       <div class="text-center pt-2">
         <h5>
-          <span>{{ monto }} {{ monedaOrigen }} </span>
+          <span  v-if="this.monto>=1">{{ monto }} {{ monedaOrigen }} </span>
           <span> Son: </span>
 
           <span> {{ valorConversion }} {{ monedaObjetivo }}</span>
@@ -149,7 +149,9 @@ export default {
       monedaObjetivo: "",
       monto: "",
       valorConversion: "",
-      fechaConversion: ""
+      fechaConversion: "",
+      guardar:'',
+
     };
   },
   mounted() {
@@ -166,19 +168,13 @@ export default {
         valorConversion: this.valorConversion,
       }
       const payload = JSON.stringify(datos);
-      const r = await fetch("http://localhost:9000/api/divisa/historial", {
+       this.guardar = await fetch("http://localhost:9000/api/divisa/historial", {
         method: "POST",
         body: payload,
         headers: {
           "Content-Type": "application/json",
         },
       });
-
-      const response = await r.json();
-      if (response) {
-         this.monedaOrigen = "",
-          this.monedaObjetivo = ""
-      }
     },
    capturarFecha(){
   
@@ -209,12 +205,15 @@ export default {
       this.monedas = monedasObtenidas;
     },
     obtenerValorMonedaOrigen() {
-      console.log(this.valorMonedaOrigen.USD, "MONTO DOLAR");
+      if(this.monto>=1){
+         console.log(this.valorMonedaOrigen.USD, "MONTO DOLAR");
 
       this.valorConversion =
         this.monto / this.valorMonedaOrigen[this.monedaOrigen];
 
       return this.valorConversion;
+      }else return;
+     
     },
   },
 };
