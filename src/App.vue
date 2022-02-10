@@ -1,7 +1,10 @@
 <template>
 <div class="fond">
 <Navbar/>
+
 <Convertidor/>
+<Historial/>
+<!-- <CrudResp/> -->
 <!-- <CrudDivisas/> -->
 </div>
 
@@ -10,7 +13,11 @@
 <script>
 
 import Navbar from './components/Navbar.vue'
+import Historial from './components/Historial.vue'
+
 import Convertidor from './components/Convertidor.vue'
+
+
 
 
 export default {
@@ -18,6 +25,9 @@ export default {
   components: {
     Navbar,
     Convertidor,
+    Historial
+  
+
   }
 }
 </script>

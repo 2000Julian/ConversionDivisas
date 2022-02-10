@@ -1,4 +1,5 @@
 <template>
+
  <div class="container">
      <h1 class="text-center">Divisas mundiales</h1>
      <table class="table table-striped">
