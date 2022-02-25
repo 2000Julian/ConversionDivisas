@@ -85,45 +85,46 @@
           </div>
         </div>
       </div>
-    
+
       <div class="col text-center pt-5">
         <button
           type="submit"
-          @click="   obtenerValorMonedaOrigen(), agregarHistorial(), capturarFecha() "
+          @click="
+            obtenerValorMonedaOrigen(), agregarHistorial(), capturarFecha()
+          "
           class="btn btn-primary center"
         >
           Convertir
         </button>
       </div>
-       <div class="row">
-          <div class="mb-1">
-            <input
-              v-model="valorConversion"
-              type="hidden"
-              v-on:keyup="convertir"
-              class="form-control"
-              id="cantidad"
-              disabled="true"
-            />
-          </div>
+      <div class="row">
+        <div class="mb-1">
+          <input
+            v-model="valorConversion"
+            type="hidden"
+            v-on:keyup="convertir"
+            class="form-control"
+            id="cantidad"
+            disabled="true"
+          />
+        </div>
       </div>
-       <div class="row">
-          <div class="mb-1">
-            <input
-              v-model="fechaConversion"
-              type="hidden"
-              v-on:keyup="convertir"
-              class="form-control"
-              id="cantidad"
-              disabled="true"
-            />
-          </div>
+      <div class="row">
+        <div class="mb-1">
+          <input
+            v-model="fechaConversion"
+            type="hidden"
+            v-on:keyup="convertir"
+            class="form-control"
+            id="cantidad"
+            disabled="true"
+          />
+        </div>
       </div>
-      
 
       <div class="text-center pt-2">
         <h5>
-          <span  v-if="this.monto>=1">{{ monto }} {{ monedaOrigen }} </span>
+          <span v-if="this.monto >= 1">{{ monto }} {{ monedaOrigen }} </span>
           <span> Son: </span>
 
           <span> {{ valorConversion }} {{ monedaObjetivo }}</span>
@@ -134,12 +135,12 @@
   <historial />
 </template>
 <script>
-export default {
 
+export default {
   data() {
     return {
       fechaActual: "",
-      fechaGuardada:"",
+      fechaGuardada: "",
       valorMonedaOrigen: null,
       valorMonedaObjetivo: null,
       valorMonedaOrigenEscojida: null,
@@ -150,25 +151,26 @@ export default {
       monto: "",
       valorConversion: "",
       fechaConversion: "",
-      guardar:'',
-
+      guardar: "",
     };
   },
   mounted() {
-  this.getDivisas();
+    this.getDivisas();
     this.getMonedas();
     this.capturarFecha();
   },
   methods: {
     async agregarHistorial() {
-       let datos = {
+      let datos = {
         monedaOrigen: this.monedaOrigen,
         monedaObjetivo: this.monedaObjetivo,
         monto: this.monto,
         valorConversion: this.valorConversion,
-      }
+        // fechaConversion: this.fechaActual.formatFromString(this.fechaActual),
+      };
+      console.log(datos, "DATOS DONDE VIENE FECHA");
       const payload = JSON.stringify(datos);
-       this.guardar = await fetch("http://localhost:9000/api/divisa/historial", {
+      this.guardar = await fetch("http://localhost:9000/api/divisa/historial", {
         method: "POST",
         body: payload,
         headers: {
@@ -176,16 +178,20 @@ export default {
         },
       });
     },
-   capturarFecha(){
-  
+    capturarFecha() {
       let fecha = new Date();
+      let dia = fecha.getDay();
       let mes = fecha.getMonth() + 1;
-      let day = fecha.getDate();
-      let year = fecha.getFullYear();
-      this.fechaActual = `${day}/${mes}/${year}`
-      this.fechaGuardada = `${year}/${mes}/${day}`
-    },  
-     seleccionar(moneda) {
+      let año = fecha.getFullYear();
+      let hora = fecha.getHours() - 12;
+      let minutos = fecha.getMinutes();
+      let segundos = fecha.getSeconds();
+      this.fechaActual = `${dia}/${mes}/${año} : ${hora}: ${minutos} : ${segundos} `;
+      this.fechaGuardada = `${año}/${mes}/${dia}`;
+
+      console.log(fecha.getDate(), "date");
+    },
+    seleccionar(moneda) {
       console.log("moneda: " + moneda);
     },
 
@@ -205,15 +211,14 @@ export default {
       this.monedas = monedasObtenidas;
     },
     obtenerValorMonedaOrigen() {
-      if(this.monto>=1){
-         console.log(this.valorMonedaOrigen.USD, "MONTO DOLAR");
+      if (this.monto >= 1) {
+        console.log(this.valorMonedaOrigen.USD, "MONTO DOLAR");
 
-      this.valorConversion =
-        this.monto / this.valorMonedaOrigen[this.monedaOrigen];
+        this.valorConversion =
+          this.monto / this.valorMonedaOrigen[this.monedaOrigen];
 
-      return this.valorConversion;
-      }else return;
-     
+        return this.valorConversion;
+      } else return;
     },
   },
 };

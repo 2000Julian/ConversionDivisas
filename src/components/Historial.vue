@@ -18,7 +18,7 @@
         <td>{{historial.monedaObjetivo}}</td>
         <td>{{historial.monto}}</td>
         <td>{{historial.valorConversion}}</td>
-        <td>{{historial.fechaConversion}}</td>
+        <!-- <td>{{historial.fechaConversion}}</td> -->
  
         <td><button type="button" class="btn btn-danger" @click="eliminar(index)">Eliminar</button></td>
       </tr>
